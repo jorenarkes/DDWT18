@@ -34,6 +34,41 @@
                     <h5><?= $page_subtitle ?></h5>
                     <p><?= $page_content ?></p>
                     <!-- Put your form here -->
+                    <form action="/DDWT18/week1/add/" method="POST">
+                    <div class="form-group row">
+                        <label for="inputName" class="col-sm-2 col-formlabel">Name</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="inputName" name="Name" required>
+                    </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="inputCreator" class="col-sm-2 col-formlabel">Creator</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="inputCreator"
+                                   name="Creator" required>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="inputSeason" class="col-sm-2 col-formlabel">Seasons</label>
+                        <div class="col-sm-10">
+                            <input type="number" class="form-control" id="inputSeason"
+                                   name="Seasons" required>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="inputAbstract" class="col-sm-2 col-formlabel">Abstract</label>
+                        <div class="col-sm-10">
+                            <textarea type="text" class="form-control" id="inputAbstract"
+                                      name="Abstract" required></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-10">
+                            <button type="submit" class="btn btn-primary"><?=
+                                $submit_btn?></button>
+                        </div>
+                    </div>
+                    </form>
                 </div>
 
                 <!-- Right column -->

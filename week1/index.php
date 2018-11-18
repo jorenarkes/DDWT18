@@ -11,7 +11,7 @@ include 'model.php';
 $pdo = connect_db('localhost', 'ddwt18_week1', 'ddwt18','ddwt18');
 $serie_count = get_serie_count($pdo);
 $serie_exp = get_series($pdo);
-$series_table = get_serie_table($serie_exp);
+$table_exp = get_serie_table($serie_exp);
 
 /* Landing page */
 if (new_route('/DDWT18/week1/', 'get')) {
@@ -56,29 +56,7 @@ elseif (new_route('/DDWT18/week1/overview/', 'get')) {
     $right_column = use_template('cards');
     $page_subtitle = 'The overview of all series';
     $page_content = 'Here you find all series listed on Series Overview.';
-    $left_content = $series_table;
-
-/*    $left_content = '
-    <table class="table table-hover">
-        <thead>
-        <tr>
-            <th scope="col">Series</th>
-            <th scope="col"><?= $serie_exp[\'name\'] ?></th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-            <th scope="row">House of Cards</th>
-            <td><a href="/DDWT18/week1/serie/" role="button" class="btn btn-primary">More info</a></td>
-        </tr>
-
-        <tr>
-            <th scope="row">Game of Thrones</th>
-            <td><a href="/DDWT18/week1/serie/" role="button" class="btn btn-primary">More info</a></td>
-        </tr>
-
-        </tbody>
-    </table>';*/
+    $left_content = $table_exp;
 
     /* Choose Template */
     include use_template('main');
@@ -157,6 +135,8 @@ elseif (new_route('/DDWT18/week1/add/', 'post')) {
         'Overview' => na('/DDWT18/week1/overview', False),
         'Add Series' => na('/DDWT18/week1/add/', True)
     ]);
+    $adding_serie = add_series($_POST, $pdo);
+    echo get_error($adding_serie);
 
     /* Page content */
     $right_column = use_template('cards');
@@ -283,3 +263,4 @@ elseif (new_route('/DDWT18/week1/remove/', 'post')) {
 else {
     http_response_code(404);
 }
+
