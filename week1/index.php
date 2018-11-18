@@ -8,6 +8,11 @@
 
 include 'model.php';
 
+$pdo = connect_db('localhost', 'ddwt18_week1', 'ddwt18','ddwt18');
+$serie_count = get_serie_count($pdo);
+$serie_exp = get_series($pdo);
+$series_table = get_serie_table($serie_exp);
+
 /* Landing page */
 if (new_route('/DDWT18/week1/', 'get')) {
     /* Page info */
@@ -51,12 +56,14 @@ elseif (new_route('/DDWT18/week1/overview/', 'get')) {
     $right_column = use_template('cards');
     $page_subtitle = 'The overview of all series';
     $page_content = 'Here you find all series listed on Series Overview.';
-    $left_content = '
+    $left_content = $series_table;
+
+/*    $left_content = '
     <table class="table table-hover">
         <thead>
         <tr>
             <th scope="col">Series</th>
-            <th scope="col"></th>
+            <th scope="col"><?= $serie_exp[\'name\'] ?></th>
         </tr>
         </thead>
         <tbody>
@@ -71,7 +78,7 @@ elseif (new_route('/DDWT18/week1/overview/', 'get')) {
         </tr>
 
         </tbody>
-    </table>';
+    </table>';*/
 
     /* Choose Template */
     include use_template('main');
@@ -80,10 +87,12 @@ elseif (new_route('/DDWT18/week1/overview/', 'get')) {
 /* Single Serie */
 elseif (new_route('/DDWT18/week1/serie/', 'get')) {
     /* Get series from db */
-    $serie_name = 'House of Cards';
-    $serie_abstract = 'A Congressman works with his equally conniving wife to exact revenge on the people who betrayed him.';
-    $nbr_seasons = '6';
-    $creators = 'Beau Willimon';
+    $serie_id = $_GET['serie_id'];
+    $serie_info_exp = get_serie_info($pdo, $serie_id);
+    $serie_name = $serie_info_exp['name'];
+    $serie_abstract = $serie_info_exp['abstract'];
+    $nbr_seasons = $serie_info_exp['seasons'];
+    $creators = $serie_info_exp['creator'];
 
     /* Page info */
     $page_title = $serie_name;
@@ -265,6 +274,7 @@ elseif (new_route('/DDWT18/week1/remove/', 'post')) {
 
         </tbody>
     </table>';
+
 
     /* Choose Template */
     include use_template('main');

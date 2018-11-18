@@ -11,6 +11,21 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
+function connect_db($host, $db, $user, $pass){
+    $charset = 'utf8mb4';
+    $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
+    $options = [
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+    ];
+    try {
+        $pdo = new PDO($dsn, $user, $pass, $options);
+    } catch (\PDOException $e) {
+        echo sprintf("Failed to connect. %s", $e->getMessage());
+    }
+    return $pdo;
+}
+
 /**
  * Check if the route exist
  * @param string $route_uri URI to be matched
@@ -118,4 +133,66 @@ function get_error($feedback){
             '.$feedback['message'].'
         </div>';
     return $error_exp;
+}
+
+function get_serie_count($pdo){
+    $stmt = $pdo->prepare('SELECT * FROM series');
+    $stmt->execute();
+    $serie = $stmt->rowCount();
+    return $serie;
+}
+
+function get_series($pdo){
+    $stmt = $pdo->prepare('SELECT * FROM series');
+    $stmt->execute();
+    $series = $stmt->fetchAll();
+    $series_exp = Array();
+    /* Create array with htmlspecialchars */
+    foreach ($series as $key => $value){
+        foreach ($value as $user_key => $user_input) {
+            $series_exp[$key][$user_key] = htmlspecialchars($user_input);
+        }
+    }
+    return $series_exp;
+}
+
+function get_serie_table($series){
+    $table_exp =
+        '
+        <table class="table table-hover">
+        <thead
+    <tr>
+        <th scope="col">Series</th>
+        <th scope="col"></th>
+        </tr>
+        </thead>
+        <tbody>';
+            foreach($series as $key => $value){
+                $table_exp .=
+                    '
+        <tr>
+        <th scope="row">'.$value['name'].'</th>
+        <td><a href="/DDWT18/week1/serie/?serie_id='.$value['id'].'" role="button" class="btn btn-primary">More info</a></td>
+        </tr>
+    ';
+            }
+            $table_exp .=
+                '
+        </tbody>
+        </table>
+    ';
+    return $table_exp;
+}
+
+function get_serie_info($pdo, $serie_id)
+{
+    $stmt = $pdo->prepare('SELECT * FROM series WHERE id = ?');
+    $stmt->execute([$serie_id]);
+    $serie_info = $stmt->fetch();
+    $serie_info_exp = Array();
+    /* Create array with htmlspecialchars */
+    foreach ($serie_info as $key => $value) {
+        $serie_info_exp[$key] = htmlspecialchars($value);
+    }
+    return $serie_info_exp;
 }
