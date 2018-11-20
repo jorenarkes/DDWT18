@@ -184,8 +184,12 @@ elseif (new_route('/DDWT18/week1/edit/', 'get')) {
 
 /* Edit serie POST */
 elseif (new_route('/DDWT18/week1/edit/', 'post')) {
+    $updating_serie = updated_series($_POST, $pdo);
+    $error_msg = get_error($updating_serie);
+
     /* Get serie info from db */
     $serie_id = $_POST['serie_id'];
+    echo $serie_id;
     $serie_info_exp = get_serie_info($pdo, $serie_id);
     $serie_name = $serie_info_exp['name'];
     $serie_abstract = $serie_info_exp['abstract'];
@@ -206,8 +210,7 @@ elseif (new_route('/DDWT18/week1/edit/', 'post')) {
         'Add Series' => na('/DDWT18/week1/add/', False)
     ]);
 
-    $updating_serie = updated_series($_POST, $pdo);
-    $error_msg = get_error($updating_serie);
+
 
     /* Page content */
     $right_column = use_template('cards');
@@ -242,27 +245,7 @@ elseif (new_route('/DDWT18/week1/remove/', 'post')) {
     $right_column = use_template('cards');
     $page_subtitle = 'The overview of all series';
     $page_content = 'Here you find all series listed on Series Overview.';
-    $left_content = '
-    <table class="table table-hover">
-        <thead>
-        <tr>
-            <th scope="col">Series</th>
-            <th scope="col"></th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-            <th scope="row">House of Cards</th>
-            <td><a href="/DDWT18/week1/serie/" role="button" class="btn btn-primary">More info</a></td>
-        </tr>
-
-        <tr>
-            <th scope="row">Game of Thrones</th>
-            <td><a href="/DDWT18/week1/serie/" role="button" class="btn btn-primary">More info</a></td>
-        </tr>
-
-        </tbody>
-    </table>';
+    $left_content = get_serie_table(get_series($pdo));
 
 
     /* Choose Template */

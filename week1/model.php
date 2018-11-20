@@ -11,6 +11,15 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
+/**
+ * Connects to the ddwt18/week1 database
+ * @param $host
+ * @param $db
+ * @param $user
+ * @param $pass
+ * @return PDO
+ */
+
 function connect_db($host, $db, $user, $pass){
     $charset = 'utf8mb4';
     $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
@@ -122,7 +131,7 @@ function p_print($input){
 }
 
 /**
- * Creats HTML alert code with information about the success or failure
+ * Creates HTML alert code with information about the success or failure
  * @param bool $type True if success, False if failure
  * @param string $message Error/Success message
  * @return string
@@ -135,12 +144,23 @@ function get_error($feedback){
     return $error_exp;
 }
 
+/**
+ * Counts the row of the series table in the database, represents the amount of series that are in the database
+ * @param $pdo
+ * @return mixed
+ */
 function get_serie_count($pdo){
     $stmt = $pdo->prepare('SELECT * FROM series');
     $stmt->execute();
     $serie = $stmt->rowCount();
     return $serie;
 }
+
+/**
+ * Retrieves all the info of all series in the database
+ * @param $pdo
+ * @return array
+ */
 
 function get_series($pdo){
     $stmt = $pdo->prepare('SELECT * FROM series');
@@ -156,6 +176,11 @@ function get_series($pdo){
     return $series_exp;
 }
 
+/**
+ * returns a table containing all series in the database
+ * @param $series
+ * @return string
+ */
 function get_serie_table($series){
     $table_exp =
         '
@@ -184,6 +209,12 @@ function get_serie_table($series){
     return $table_exp;
 }
 
+/**
+ * Returns the info of one particular serie based on the id of that serie
+ * @param $pdo
+ * @param $serie_id
+ * @return array
+ */
 function get_serie_info($pdo, $serie_id)
 {
     $stmt = $pdo->prepare('SELECT * FROM series WHERE id = ?');
@@ -197,6 +228,12 @@ function get_serie_info($pdo, $serie_id)
     return $serie_info_exp;
 }
 
+/**
+ * Adds a serie to the database
+ * @param $serie_info
+ * @param $pdo
+ * @return array
+ */
 function add_series($serie_info, $pdo){
     /* Check if all fields are set */
     if (
@@ -250,6 +287,12 @@ function add_series($serie_info, $pdo){
     }
 }
 
+/**
+ * Updates a serie which is already in the database
+ * @param $serie_info
+ * @param $pdo
+ * @return array
+ */
 function updated_series($serie_info, $pdo){
     /* Check if all fields are set */
     if (
@@ -312,6 +355,12 @@ function updated_series($serie_info, $pdo){
     }
 }
 
+/**
+ * Removes a serie from the database
+ * @param $pdo
+ * @param $serie_id
+ * @return array
+ */
 function remove_serie($pdo, $serie_id){
     $serie_info = get_serie_info($pdo, $serie_id);
     /* Delete Serie */
