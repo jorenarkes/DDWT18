@@ -130,7 +130,7 @@ function get_navigation($navigation){
  * @param array $series with series from the db
  * @return string
  */
-function get_serie_table($series){
+function get_serie_table($series, $pdo){
     $table_exp = '
     <table class="table table-hover">
     <thead
@@ -144,6 +144,7 @@ function get_serie_table($series){
         $table_exp .= '
         <tr>
             <th scope="row">'.$value['name'].'</th>
+            <td> Added by user: '.get_user_name($value['user'], $pdo).'</td>
             <td><a href="/DDWT18/week2/serie/?serie_id='.$value['id'].'" role="button" class="btn btn-primary">More info</a></td>
         </tr>
         ';
@@ -411,4 +412,18 @@ function get_user_id(){
     } else {
         return False;
     }
+}
+
+function get_user_name($user_id, $pdo) {
+    $stmt = $pdo->prepare('SELECT firstname, lastname FROM users WHERE id = ?');
+    $stmt->execute([$user_id]);
+    $user_info = $stmt->fetch();
+    $user_name_exp = Array();
+
+    foreach ($user_info as $key => $value) {
+        $user_name_exp[$key] = htmlspecialchars($value);
+    }
+    $first_name = $user_name_exp['firstname'];
+    $last_name = $user_name_exp['lastname'];
+    return "$first_name $last_name";
 }

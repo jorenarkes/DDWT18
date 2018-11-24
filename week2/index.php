@@ -10,12 +10,11 @@ include 'model.php';
 
 /* Connect to DB */
 $db = connect_db('localhost', 'ddwt18_week2', 'ddwt18','ddwt18');
+/* Get Number of Series */
+$nbr_series = count_series($db);
 
 /* Landing page */
 if (new_route('/DDWT18/week2/', 'get')) {
-    /* Get Number of Series */
-    $nbr_series = count_series($db);
-
     /* Page info */
     $page_title = 'Home';
     $breadcrumbs = get_breadcrumbs([
@@ -42,9 +41,6 @@ if (new_route('/DDWT18/week2/', 'get')) {
 
 /* Overview page */
 elseif (new_route('/DDWT18/week2/overview/', 'get')) {
-    /* Get Number of Series */
-    $nbr_series = count_series($db);
-
     /* Page info */
     $page_title = 'Overview';
     $breadcrumbs = get_breadcrumbs([
@@ -64,7 +60,7 @@ elseif (new_route('/DDWT18/week2/overview/', 'get')) {
     $right_column = use_template('cards');
     $page_subtitle = 'The overview of all series';
     $page_content = 'Here you find all series listed on Series Overview.';
-    $left_content = get_serie_table(get_series($db));
+    $left_content = get_serie_table(get_series($db), $db);
 
     /* Choose Template */
     include use_template('main');
@@ -72,9 +68,6 @@ elseif (new_route('/DDWT18/week2/overview/', 'get')) {
 
 /* Single Serie */
 elseif (new_route('/DDWT18/week2/serie/', 'get')) {
-    /* Get Number of Series */
-    $nbr_series = count_series($db);
-
     /* Get series from db */
     $serie_id = $_GET['serie_id'];
     $serie_info = get_serieinfo($db, $serie_id);
@@ -108,9 +101,6 @@ elseif (new_route('/DDWT18/week2/serie/', 'get')) {
 
 /* Add serie GET */
 elseif (new_route('/DDWT18/week2/add/', 'get')) {
-    /* Get Number of Series */
-    $nbr_series = count_series($db);
-
     /* Page info */
     $page_title = 'Add Series';
     $breadcrumbs = get_breadcrumbs([
@@ -139,9 +129,6 @@ elseif (new_route('/DDWT18/week2/add/', 'get')) {
 
 /* Add serie POST */
 elseif (new_route('/DDWT18/week2/add/', 'post')) {
-    /* Get Number of Series */
-    $nbr_series = count_series($db);
-
     /* Page info */
     $page_title = 'Add Series';
     $breadcrumbs = get_breadcrumbs([
@@ -173,9 +160,6 @@ elseif (new_route('/DDWT18/week2/add/', 'post')) {
 
 /* Edit serie GET */
 elseif (new_route('/DDWT18/week2/edit/', 'get')) {
-    /* Get Number of Series */
-    $nbr_series = count_series($db);
-
     /* Get serie info from db */
     $serie_id = $_GET['serie_id'];
     $serie_info = get_serieinfo($db, $serie_id);
@@ -208,9 +192,6 @@ elseif (new_route('/DDWT18/week2/edit/', 'get')) {
 
 /* Edit serie POST */
 elseif (new_route('/DDWT18/week2/edit/', 'post')) {
-    /* Get Number of Series */
-    $nbr_series = count_series($db);
-
     /* Update serie in database */
     $feedback = update_serie($db, $_POST);
     $error_msg = get_error($feedback);
@@ -248,9 +229,6 @@ elseif (new_route('/DDWT18/week2/edit/', 'post')) {
 
 /* Remove serie */
 elseif (new_route('/DDWT18/week2/remove/', 'post')) {
-    /* Get Number of Series */
-    $nbr_series = count_series($db);
-
     /* Remove serie in database */
     $serie_id = $_POST['serie_id'];
     $feedback = remove_serie($db, $serie_id);
