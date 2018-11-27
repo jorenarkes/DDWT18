@@ -36,14 +36,14 @@
 
             </div>
 
-            <div class="pd-15">&nbsp;</div>
+            <div class="pd-15">&nbsp</div>
 
             <div class="row">
 
                 <div class="col-md-4">
                     <div class="card">
                         <div class="card-header">
-                            Welcome, <?= $user ?>
+                            Welcome, <?= get_user_name($_SESSION['user_id'], $db) ?>
                         </div>
                         <div class="card-body">
                             <p>You're logged in to Series Overview.</p>
