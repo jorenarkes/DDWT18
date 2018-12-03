@@ -1,0 +1,15 @@
+{
+  "name": "jorenarkes/DDWT18_week3",
+  "description": "description_text",
+  "minimum-stability": "stable",
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "Joren Arkes",
+      "email": "j.arkes@student.rug.nl"
+    }
+  ],
+  "require": {
+    "bramus/router": "1.3"
+  }
+}
